@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">Garde app icon</title>
+  <rect width="512" height="512" rx="96" fill="#2f6b4f"/>
+  <path fill="#fffdf7" d="M142 136h228c18 0 32 14 32 32v192c0 18-14 32-32 32H142c-18 0-32-14-32-32V168c0-18 14-32 32-32Z"/>
+  <path fill="#d99a2b" d="M152 178h208v54H152z"/>
+  <path fill="#c84f3f" d="M152 260h92v92h-92z"/>
+  <path fill="#2f6b4f" d="M274 260h86v34h-86zM274 318h86v34h-86z"/>
+  <circle cx="198" cy="306" r="20" fill="#fffdf7"/>
+  <path fill="#1f2521" d="M392 207h18v114h-18z"/>
+</svg>

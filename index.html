@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#2f6b4f" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Garde-Manger" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>Garde-Manger - Pantry Recipe Finder</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+    <link rel="stylesheet" href="styles.css?v=12" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Garde-manger</p>
+        <h1>Garde-Manger</h1>
+      </div>
+      <div class="topbar__stats" aria-live="polite">
+        <span id="modeBadge">Local mode</span>
+        <span id="ingredientCount">0 ingredients</span>
+        <span id="readyCount">0 ready</span>
+      </div>
+    </header>
+
+    <main class="app" aria-label="Pantry recipe finder">
+      <section class="scan-panel" aria-labelledby="scanTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Photo</p>
+            <h2 id="scanTitle">Pantry scan</h2>
+          </div>
+          <button class="icon-button" id="resetButton" type="button" aria-label="Reset pantry" title="Reset pantry">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+          </button>
+        </div>
+
+        <label class="dropzone" id="dropzone" for="photoInput">
+          <img id="previewImage" src="assets/pantry-placeholder.png" alt="Open pantry and refrigerator shelves" />
+          <span class="dropzone__overlay">
+            <span class="dropzone__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z"/><circle cx="12" cy="13" r="3.5"/></svg>
+            </span>
+            <span>Add photo</span>
+          </span>
+        </label>
+        <input id="photoInput" type="file" accept="image/*" capture="environment" multiple />
+        <div class="scan-queue" id="scanQueue" aria-live="polite"></div>
+
+        <div class="scan-actions">
+          <button class="primary-button" id="scanButton" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 1.7 5.1L19 10l-5.3 1.9L12 17l-1.7-5.1L5 10l5.3-1.9L12 3Z"/><path d="m19 15 .8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15Z"/></svg>
+            <span>Scan photos</span>
+          </button>
+          <label class="secondary-button" for="photoInput">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+            <span>Photo</span>
+          </label>
+        </div>
+
+        <div class="scan-status" id="scanStatus">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span>Add photos to scan</span>
+        </div>
+
+        <div class="review-panel" id="reviewPanel" hidden>
+          <div class="review-panel__head">
+            <strong>Scan review</strong>
+            <button type="button" id="acceptScanButton">Accept all</button>
+          </div>
+          <div class="detection-list" id="detectionList"></div>
+        </div>
+      </section>
+
+      <section class="pantry-panel" aria-labelledby="pantryTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Inventory</p>
+            <h2 id="pantryTitle">Ingredients</h2>
+          </div>
+        </div>
+
+        <form class="add-form" id="ingredientForm">
+          <input id="ingredientInput" type="text" autocomplete="off" placeholder="Add ingredient" aria-label="Add ingredient" />
+          <button class="icon-button icon-button--filled" type="submit" aria-label="Add ingredient" title="Add ingredient">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+          </button>
+        </form>
+
+        <div class="chip-list" id="ingredientList" aria-live="polite"></div>
+
+        <div class="quick-add" aria-label="Suggested ingredients">
+          <button type="button" data-add="chicken">Chicken</button>
+          <button type="button" data-add="lentils">Lentils</button>
+          <button type="button" data-add="potatoes">Potatoes</button>
+          <button type="button" data-add="mushrooms">Mushrooms</button>
+          <button type="button" data-add="bread">Bread</button>
+          <button type="button" data-add="milk">Milk</button>
+        </div>
+
+        <fieldset class="preferences">
+          <legend>Preferences</legend>
+          <label>
+            <input type="checkbox" id="staplesToggle" checked />
+            Pantry staples
+          </label>
+          <label>
+            <input type="checkbox" id="vegetarianToggle" />
+            Vegetarian
+          </label>
+          <label>
+            <input type="checkbox" id="fastToggle" />
+            Under 25 min
+          </label>
+        </fieldset>
+
+        <div class="privacy-tools">
+          <button type="button" id="savePantryButton">Save pantry</button>
+          <button type="button" id="clearDataButton">Delete local data</button>
+        </div>
+      </section>
+
+      <section class="recipes-panel" aria-labelledby="recipesTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Matches</p>
+            <h2 id="recipesTitle">Recipes</h2>
+          </div>
+          <div class="recipe-tools">
+            <span class="recipe-source" id="recipeSource">Local recipes</span>
+            <button class="secondary-button compact-button" id="generateRecipesButton" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 1.7 5.1L19 10l-5.3 1.9L12 17l-1.7-5.1L5 10l5.3-1.9L12 3Z"/><path d="M5 19h14"/></svg>
+              <span>Generate</span>
+            </button>
+            <div class="segmented" role="tablist" aria-label="Recipe filter">
+              <button class="is-active" type="button" data-filter="all">All</button>
+              <button type="button" data-filter="ready">Ready</button>
+              <button type="button" data-filter="close">Close</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="cart-strip" id="cartStrip" aria-live="polite"></div>
+        <div class="recipe-list" id="recipeList"></div>
+      </section>
+    </main>
+
+    <template id="ingredientTemplate">
+      <span class="chip">
+        <span data-name></span>
+        <button type="button" aria-label="">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </span>
+    </template>
+
+    <template id="recipeTemplate">
+      <article class="recipe-card">
+        <div class="recipe-card__top">
+          <div>
+            <span class="recipe-badge"></span>
+            <h3></h3>
+          </div>
+          <strong class="recipe-score"></strong>
+        </div>
+        <div class="match-meter" aria-hidden="true"><span></span></div>
+        <dl class="recipe-meta">
+          <div><dt>Time</dt><dd data-time></dd></div>
+          <div><dt>Serves</dt><dd data-serves></dd></div>
+          <div><dt>Level</dt><dd data-level></dd></div>
+        </dl>
+        <div class="ingredient-lines">
+          <p data-have></p>
+          <p data-missing></p>
+        </div>
+        <button class="cart-button" type="button" data-cart-button>Add missing to list</button>
+        <ol class="steps"></ol>
+      </article>
+    </template>
+
+    <script src="app.js?v=12"></script>
+  </body>
+</html>
